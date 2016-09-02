@@ -1,13 +1,12 @@
 package services;
 
-import org.springframework.stereotype.Component;
+import org.springframework.data.repository.CrudRepository;
 
 import models.User;
 
-@Component
-public class UserRepository extends services.Repository<String, User> {
+public interface UserRepository extends CrudRepository<User, Long> {
 
-	public UserRepository() {
+	/*public UserRepository() {
 		User admin1 = new User("abner@gmail.com", "123456");
 		admin1.setAdmin(true);
 		save(admin1);
@@ -20,6 +19,6 @@ public class UserRepository extends services.Repository<String, User> {
 	
 	public User save(User model) {
 		return this.data.put(model.getId(), model);
-	}
+	}*/
 
 }

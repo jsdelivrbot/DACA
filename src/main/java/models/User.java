@@ -2,40 +2,51 @@ package models;
 
 import java.util.regex.Pattern;
 
-public class User extends Model<String> {
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+
+@Entity
+public class User {
 
 	public static final Pattern VALID_EMAIL_ADDRESS_REGEX = 
 		    Pattern.compile("^[A-Z0-9._%+-]+@[A-Z0-9.-]+\\.[A-Z]{2,6}$", Pattern.CASE_INSENSITIVE);
 	public static final Pattern VALID_PASSWORD_REGEX =
 			Pattern.compile("^.{6,20}$");
 	
-	private static final long serialVersionUID = 1L;
-
+	@Id
+	private Long id;
+	
+	@Column(nullable = false)
 	private String email;
+	
+	@Column(nullable = false)
 	private String password;
+	
+	@Column(nullable = false)
 	private boolean isAdmin;
 	
-	public User() {
+	protected User() {
 		
 	}
 	
-	public User(String email, String password) {
-		if (email == null || !VALID_EMAIL_ADDRESS_REGEX.matcher(email).matches()) {
-			throw new InvalidFieldException("email", "Invalid e-mail.");
-		} else if (password == null || !VALID_PASSWORD_REGEX.matcher(password).matches()) {
-			throw new InvalidFieldException("password", "Password must be between 6 and 20 characters.");
-		}
-		setEmail(email);
-		setPassword(password);
+	public Long getId() {
+		return this.id;
 	}
 	
+	public void setId(Long id) {
+		this.id = id;
+	}
 	
 	public String getEmail() {
-		return this.getId();
+		return this.email;
 	}
 	
 	public void setEmail(String email) {
-		this.setId(email);
+		if (email == null || !VALID_EMAIL_ADDRESS_REGEX.matcher(email).matches()) {
+			throw new InvalidFieldException("email", "Invalid e-mail.");
+		}
+		this.email = email;
 	}
 	
 	public String getPassword() {
@@ -43,6 +54,9 @@ public class User extends Model<String> {
 	}
 	
 	public void setPassword(String password) {
+		if (password == null || !VALID_PASSWORD_REGEX.matcher(password).matches()) {
+			throw new InvalidFieldException("password", "Password must be between 6 and 20 characters.");
+		}
 		this.password = password;
 	}
 

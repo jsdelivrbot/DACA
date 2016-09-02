@@ -1,41 +1,69 @@
 package models;
 
-import java.util.ArrayList;
 import java.util.List;
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.Id;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
+
+import org.hibernate.annotations.Cascade;
+import org.hibernate.annotations.CascadeType;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
-public class Solution extends Model<String> {
+@Entity
+public class Solution {
 
-	private static final long serialVersionUID = 1L;
+	@Id
+	private Long id;
 	
+	@Column(nullable = false)
+	@ManyToOne(fetch=FetchType.LAZY)
 	@JsonIgnore
-	private String submitter;
+	private User submitter;
+	
+	@Column(nullable = false)
+	@ManyToOne(fetch=FetchType.LAZY)
 	@JsonIgnore
-	private Long problemId;
+	private Problem problem;
+	
+	@Column
 	private String body;
-	private List<Test> tests;
-	private List<String> outputs;
 	
-	public Solution() {
-		tests = new ArrayList<Test>();
-		outputs = new ArrayList<String>();
+	@Column
+	@OneToMany(fetch = FetchType.LAZY)
+	@Cascade(CascadeType.ALL)
+	private List<Output> outputs;
+	
+	protected Solution() {
+		
+	}
+
+	public Long getId() {
+		return this.id;
 	}
 	
-	public String getSubmitter() {
+	public void setId(Long id) {
+		this.id = id;
+	}
+	
+	public User getSubmitter() {
 		return this.submitter;
 	}
 	
-	public void setSubmitter(String submitter) {
+	public void setSubmitter(User submitter) {
 		this.submitter = submitter;
 	}
 	
-	public Long getProblemId() {
-		return this.problemId;
+	public Problem getProblem() {
+		return this.problem;
 	}
 	
-	public void setProblemId(Long problemId) {
-		this.problemId = problemId;
+	public void setProblem(Problem problem) {
+		this.problem = problem;
 	}
 
 	public String getBody() {
@@ -46,25 +74,17 @@ public class Solution extends Model<String> {
 		this.body = body;
 	}
 
-	public List<Test> getTests() {
-		return this.tests;
-	}
-	
-	public void setTests(List<Test> tests) {
-		this.tests = tests;
-	}
-	
-	public List<String> getOutputs() {
+	public List<Output> getOutputs() {
 		return this.outputs;
 	}
 	
-	public void setOutputs(List<String> outputs) {
+	public void setOutputs(List<Output> outputs) {
 		this.outputs = outputs;
 	}
 	
 	public boolean isSolved() {
-		for (int i = 0; i < this.tests.size(); i++) {
-			if (!this.tests.get(i).getExpectedOutput().equals(this.outputs.get(i))) {
+		for (Output o : this.outputs) {
+			if (!o.isCorrect()) {
 				return false;
 			}
 		}

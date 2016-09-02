@@ -1,44 +1,44 @@
 package models;
 
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-public class Test extends Model<Long> {
+@Entity
+public class Test {
 
-	private static final long serialVersionUID = 1L;
-
+	@Id
+	private Long id;
+	
+	@Column
 	private String name;
+	
+	@Column
 	private String tip;
+	
+	@Column(nullable = false)
 	private String input;
+	
+	@Column(nullable = false)
 	@JsonProperty("expected_output")
 	private String expectedOutput;
+	
+	@Column(nullable = false)
 	@JsonProperty("public")
 	private boolean isPublic;
 	
-	public Test() {
+	protected Test() {
 		
 	}
-	
-	public Test(String name, String tip, String input, String expectedOutput, boolean isPublic) {
-		if (input == null || input.trim().equals("")) {
-			throw new InvalidFieldException("input", "Input cannot be empty.");
-		} else if (expectedOutput == null || expectedOutput.trim().equals("")) {
-			throw new InvalidFieldException("expected_output", "Expected output cannot be empty.");
-		} 
-		setName(name);
-		setTip(tip);
-		setInput(input);
-		setExpectedOutput(expectedOutput);
-		setPublic(isPublic);
+
+	public Long getId() {
+		return this.id;
 	}
 	
-	// copy constructor
-	public Test(Test other) {
-		this.id = other.id;
-		this.name = other.name;
-		this.tip = other.tip;
-		this.input = other.input;
-		this.expectedOutput = other.expectedOutput;
-		this.isPublic = other.isPublic;
+	public void setId(Long id) {
+		this.id = id;
 	}
 	
 	public String getName() {
@@ -62,6 +62,9 @@ public class Test extends Model<Long> {
 	}
 	
 	public void setInput(String input) {
+		if (input == null || input.trim().equals("")) {
+			throw new InvalidFieldException("input", "Input cannot be empty.");
+		}
 		this.input = input;
 	}
 	
@@ -70,6 +73,9 @@ public class Test extends Model<Long> {
 	}
 	
 	public void setExpectedOutput(String expectedOutput) {
+		if (expectedOutput == null || expectedOutput.trim().equals("")) {
+			throw new InvalidFieldException("expected_output", "Expected output cannot be empty.");
+		}
 		this.expectedOutput = expectedOutput;
 	}
 	

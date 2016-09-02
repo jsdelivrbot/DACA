@@ -56,12 +56,12 @@ public class TokenService {
 	public User validateToken(String token)  {
 		String value = token.replace("Token ", "");
 		JSONObject json;
-		String id;
+		Long id;
 		long expires;
 		try {
 			String decrypted = decrypt(value);
 			json = new JSONObject(decrypted);
-			id = json.getString("id");
+			id = json.getLong("id");
 			expires = json.getLong("expires");
 		} catch (Exception e) {
 			throw new AuthException("Token malformed.");
@@ -70,7 +70,7 @@ public class TokenService {
 		if (currentTime > expires) {
 			throw new AuthException("Token has expired.");
 		}
-		return repository.findById(id);
+		return repository.findOne(id);
 	}
 	
 	public User getUser(String token) {
