@@ -1,4 +1,4 @@
-package seavidaterderlimoes;
+
 
 import static com.jayway.restassured.RestAssured.given;
 import static org.hamcrest.CoreMatchers.containsString;
@@ -23,7 +23,7 @@ import services.UserRepository;
 @WebIntegrationTest("server.port=0")
 @RunWith(SpringJUnit4ClassRunner.class)
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
-public class UsersControllerTest {
+public class TestUserController {
 
 	@Value("${local.server.port}")
 	private int port;

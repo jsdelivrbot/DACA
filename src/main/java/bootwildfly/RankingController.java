@@ -7,6 +7,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import models.Score;
@@ -18,8 +19,6 @@ import services.UserRepository;
 @RequestMapping(value="ranking", produces="application/json")
 public class RankingController {
 
-	private static final int TOP_N = 10;
-	
 	@Autowired
 	private UserRepository repository;
 	
@@ -27,7 +26,7 @@ public class RankingController {
 	private SolutionService solutionService;
 	
 	@RequestMapping(method=RequestMethod.GET)
-	public List<Score> getRanking() {
+	public List<Score> getRanking(@RequestParam(name="top", defaultValue="10") int top) {
 		Iterable<User> users = repository.findAll();
 		List<Score> scores = new ArrayList<>();
 		for (User user : users) {
@@ -36,7 +35,7 @@ public class RankingController {
 			scores.add(score);
 		}
 		Collections.sort(scores);
-		return scores.subList(0, TOP_N);
+		return scores.subList(0, top);
 	}
 	
 }
