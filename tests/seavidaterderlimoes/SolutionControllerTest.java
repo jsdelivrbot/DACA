@@ -56,7 +56,7 @@ public class SolutionControllerTest {
 					.toString())
 		.when()
 			.port(this.port)
-			.post("problems")
+			.post("problem")
 		.then()
 			.assertThat().statusCode(is(201))
 		.extract().header("Location");
@@ -74,7 +74,7 @@ public class SolutionControllerTest {
 					.toString())
 		.when()
 			.port(this.port)
-			.put(location + "/tests")
+			.put(location + "/test")
 		.then()
 			.assertThat().statusCode(is(204));
 		given()

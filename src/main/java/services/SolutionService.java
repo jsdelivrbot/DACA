@@ -25,7 +25,7 @@ public class SolutionService {
 		return submitters.size();
 	}
 
-	public Object getNumSolved(User user) {
+	public int getNumSolved(User user) {
 		int solved = 0;
 		Iterable<Solution> solutions = repository.findBySubmitter(user);
 		for (Solution s : solutions) {

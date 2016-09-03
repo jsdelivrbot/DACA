@@ -27,8 +27,8 @@ import services.SolutionService;
 import services.TokenService;
 
 @RestController
-@RequestMapping(value="problems", produces="application/json")
-public class ProblemsController {
+@RequestMapping(value="problem", produces="application/json")
+public class ProblemController {
 
 	private static final int PAGE_SIZE = 20;
 	
@@ -42,7 +42,7 @@ public class ProblemsController {
 	@RequestMapping(method=RequestMethod.GET)
 	public List<ProblemDTO> listProblems(@RequestHeader(value="Authorization", required=false) String token,
 			@RequestParam(name="page", defaultValue="0") int page) {
-		User requestor = tokenService.getUser(token);
+		//User requestor = tokenService.getUser(token);
 		Iterable<Problem> problems = problemRepository.findByPublished(true, new PageRequest(page, PAGE_SIZE));
 		List<ProblemDTO> problemsDTO = new ArrayList<>();
 		for (Problem problem : problems) {
@@ -50,7 +50,7 @@ public class ProblemsController {
 			p.setOwnerEmail(problem.getOwner().getEmail());
 			p.setName(problem.getName());
 			p.setDescription(problem.getDescription());
-			p.setSolved(solutionService.isSolved(problem, requestor));
+			//p.setSolved(solutionService.isSolved(problem, requestor));
 			p.setPublished(problem.isPublished());
 			problemsDTO.add(p);
 		}
@@ -64,7 +64,7 @@ public class ProblemsController {
 		User requestor = tokenService.validateToken(token);
 		Problem problem = new Problem(requestor, problemDTO.getName(), problemDTO.getDescription(), problemDTO.getTip());
 		problemRepository.save(problem);
-		response.setHeader("Location", "/problems/" + problem.getId());
+		response.setHeader("Location", "/problem/" + problem.getId());
 	} 
 	 
 	@RequestMapping(value="/{problemId}", method=RequestMethod.GET)

@@ -46,7 +46,7 @@ public class UsersControllerTest {
 					.toString())
 		.when()
 			.port(this.port)
-			.post("users")
+			.post("user")
 		.then()
 			.assertThat().statusCode(is(201)).body(containsString("token"));
 		given()
@@ -74,7 +74,7 @@ public class UsersControllerTest {
 					.toString())
 		.when()
 			.port(this.port)
-			.post("users")
+			.post("user")
 		.then()
 			.assertThat().statusCode(is(201)).body(containsString("token"));
 		given()
@@ -86,7 +86,7 @@ public class UsersControllerTest {
 					.toString())
 		.when()
 			.port(this.port)
-			.post("users")
+			.post("user")
 		.then()
 			.assertThat().statusCode(is(400));
 	}
@@ -102,7 +102,7 @@ public class UsersControllerTest {
 					.toString())
 		.when()
 			.port(this.port)
-			.post("users")
+			.post("user")
 		.then()
 			.assertThat().statusCode(is(400)).and().body("field", is("email"));
 		given()
@@ -113,7 +113,7 @@ public class UsersControllerTest {
 					.toString())
 		.when()
 			.port(this.port)
-			.post("users")
+			.post("user")
 		.then()
 			.assertThat().statusCode(is(400)).and().body("field", is("email"));
 		given()
@@ -125,7 +125,7 @@ public class UsersControllerTest {
 					.toString())
 		.when()
 			.port(this.port)
-			.post("users")
+			.post("user")
 		.then()
 			.assertThat().statusCode(is(400)).and().body("field", is("password"));
 		given()
@@ -136,7 +136,7 @@ public class UsersControllerTest {
 					.toString())
 		.when()
 			.port(this.port)
-			.post("users")
+			.post("user")
 		.then()
 			.assertThat().statusCode(is(400)).and().body("field", is("password"));
 		given()
@@ -144,7 +144,7 @@ public class UsersControllerTest {
 			.contentType("application/json")
 		.when()
 			.port(this.port)
-			.post("users")
+			.post("user")
 		.then()
 			.assertThat().statusCode(is(400)).and().body(is(""));
 	}
@@ -160,7 +160,7 @@ public class UsersControllerTest {
 					.toString())
 		.when()
 			.port(this.port)
-			.post("users")
+			.post("user")
 		.then()
 			.assertThat().statusCode(is(201));
 		given()

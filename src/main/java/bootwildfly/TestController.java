@@ -24,8 +24,8 @@ import services.ProblemRepository;
 import services.TokenService;
 
 @RestController
-@RequestMapping(value="problems/{problemId}/tests", produces="application/json")
-public class TestsController {
+@RequestMapping(value="problem/{problemId}/test", produces="application/json")
+public class TestController {
 
 	@Autowired
 	private ProblemRepository repository;

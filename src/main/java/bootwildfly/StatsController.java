@@ -30,7 +30,7 @@ public class StatsController {
 				.build();
 	}
 	
-	@RequestMapping(value="/users/{email}/stats", method=RequestMethod.GET, produces="application/json")
+	@RequestMapping(value="/user/{email}/stats", method=RequestMethod.GET, produces="application/json")
 	public ResponseEntity<String> getUserStats(@PathVariable("email") String email) {
 		Iterable<User> users = userRepository.findByEmail(email);
 		for (User user : users) {

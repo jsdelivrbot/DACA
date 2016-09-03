@@ -15,7 +15,7 @@ import services.TokenService;
 import services.UserRepository;
 
 @RestController
-public class UsersController {
+public class UserController {
 
 	@Autowired
 	private UserRepository repository;
@@ -30,7 +30,7 @@ public class UsersController {
 		return null;
 	}
 	
-	@RequestMapping(value="users", method=RequestMethod.POST, consumes="application/json", produces="application/json")
+	@RequestMapping(value="user", method=RequestMethod.POST, consumes="application/json", produces="application/json")
 	public ResponseEntity<String> createUser(@RequestBody UserDTO userDTO) {
 		User user = new User(userDTO.getEmail(), userDTO.getPassword());
 		if (getUser(userDTO.getEmail()) != null) {

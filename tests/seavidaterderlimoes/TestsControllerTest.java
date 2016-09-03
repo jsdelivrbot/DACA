@@ -57,7 +57,7 @@ public class TestsControllerTest {
 					.toString())
 		.when()
 			.port(this.port)
-			.post("problems")
+			.post("problem")
 		.then()
 			.assertThat().statusCode(is(201))
 		.extract().header("Location");
@@ -75,7 +75,7 @@ public class TestsControllerTest {
 			.contentType("application/json")
 		.when()
 			.port(this.port)
-			.get(location + "/tests")
+			.get(location + "/test")
 		.then()
 			.assertThat().statusCode(is(200)).and().body(is("[]"));
 		given()
@@ -92,7 +92,7 @@ public class TestsControllerTest {
 					.toString())
 		.when()
 			.port(this.port)
-			.put(location + "/tests")
+			.put(location + "/test")
 		.then()
 			.assertThat().statusCode(is(204));
 		given()
@@ -101,7 +101,7 @@ public class TestsControllerTest {
 			.header("Authorization", "Token " + this.token1)
 		.when()
 			.port(this.port)
-			.get(location + "/tests")
+			.get(location + "/test")
 		.then()
 			.assertThat().statusCode(is(200)).and()
 				.body("input", hasItems("1", "2")).and()
@@ -124,7 +124,7 @@ public class TestsControllerTest {
 					.toString())
 		.when()
 			.port(this.port)
-			.put(location + "/tests")
+			.put(location + "/test")
 		.then()
 			.assertThat().statusCode(is(400)).and().body("field", is("input"));
 		given()
@@ -141,7 +141,7 @@ public class TestsControllerTest {
 					.toString())
 		.when()
 			.port(this.port)
-			.put(location + "/tests")
+			.put(location + "/test")
 		.then()
 			.assertThat().statusCode(is(400)).and().body("field", is("expected_output"));
 	}
@@ -162,7 +162,7 @@ public class TestsControllerTest {
 					.toString())
 		.when()
 			.port(this.port)
-			.put(location + "/tests")
+			.put(location + "/test")
 		.then()
 			.assertThat().statusCode(is(401));
 	}
@@ -183,7 +183,7 @@ public class TestsControllerTest {
 					.toString())
 		.when()
 			.port(this.port)
-			.put(location + "/tests")
+			.put(location + "/test")
 		.then()
 			.assertThat().statusCode(is(204));
 		given()
@@ -191,7 +191,7 @@ public class TestsControllerTest {
 			.contentType("application/json")
 		.when()
 			.port(this.port)
-			.get(location + "/tests")
+			.get(location + "/test")
 		.then()
 			.assertThat().statusCode(is(200)).and()
 				.body("input", hasItems("1", "2")).and()
@@ -212,7 +212,7 @@ public class TestsControllerTest {
 					.toString())
 		.when()
 			.port(this.port)
-			.put(location + "/tests")
+			.put(location + "/test")
 		.then()
 			.assertThat().statusCode(is(204));
 		given()
@@ -220,7 +220,7 @@ public class TestsControllerTest {
 			.contentType("application/json")
 		.when()
 			.port(this.port)
-			.get(location + "/tests")
+			.get(location + "/test")
 		.then()
 			.assertThat().statusCode(is(200)).and()
 				.body("input", hasItems("1", "2")).and()
@@ -243,7 +243,7 @@ public class TestsControllerTest {
 					.toString())
 		.when()
 			.port(this.port)
-			.put(location + "/tests")
+			.put(location + "/test")
 		.then()
 			.assertThat().statusCode(is(204));
 		given()

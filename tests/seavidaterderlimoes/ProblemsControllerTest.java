@@ -58,7 +58,7 @@ public class ProblemsControllerTest {
 			.contentType("application/json")
 		.when()
 			.port(this.port)
-			.get("problems")
+			.get("problem")
 		.then()
 			.assertThat().statusCode(is(200)).and().body(is("[]"));
 		String location = given()
@@ -72,7 +72,7 @@ public class ProblemsControllerTest {
 					.toString())
 		.when()
 			.port(this.port)
-			.post("problems")
+			.post("problem")
 		.then()
 			.assertThat().statusCode(is(201))
 		.extract().header("Location");
@@ -81,7 +81,7 @@ public class ProblemsControllerTest {
 			.contentType("application/json")
 		.when()
 			.port(this.port)
-			.get("problems")
+			.get("problem")
 		.then()
 			.assertThat().statusCode(is(200)).and().body(is("[]"));
 		given()
@@ -112,7 +112,7 @@ public class ProblemsControllerTest {
 					.toString())
 		.when()
 			.port(this.port)
-			.post("problems")
+			.post("problem")
 		.then()
 			.assertThat().statusCode(is(400)).and().body("field", is("name"));
 	}
@@ -130,7 +130,7 @@ public class ProblemsControllerTest {
 					.toString())
 		.when()
 			.port(this.port)
-			.post("problems")
+			.post("problem")
 		.then()
 			.assertThat().statusCode(is(201))
 		.extract().header("Location");
@@ -176,7 +176,7 @@ public class ProblemsControllerTest {
 					.toString())
 		.when()
 			.port(this.port)
-			.put("problems/1")
+			.put("problem/1")
 		.then()
 			.assertThat().statusCode(is(404));
 		String location = given()
@@ -190,7 +190,7 @@ public class ProblemsControllerTest {
 					.toString())
 		.when()
 			.port(this.port)
-			.post("problems")
+			.post("problem")
 		.then()
 			.assertThat().statusCode(is(201))
 		.extract().header("Location");
@@ -232,7 +232,7 @@ public class ProblemsControllerTest {
 			.header("Authorization", "Token " + this.token1)
 		.when()
 			.port(this.port)
-			.delete("problems/1")
+			.delete("problem/1")
 		.then()
 			.assertThat().statusCode(is(404));
 		String location = given()
@@ -246,7 +246,7 @@ public class ProblemsControllerTest {
 					.toString())
 		.when()
 			.port(this.port)
-			.post("problems")
+			.post("problem")
 		.then()
 			.assertThat().statusCode(is(201))
 		.extract().header("Location");
@@ -290,7 +290,7 @@ public class ProblemsControllerTest {
 					.toString())
 		.when()
 			.port(this.port)
-			.post("problems")
+			.post("problem")
 		.then()
 			.assertThat().statusCode(is(201))
 		.extract().header("Location");

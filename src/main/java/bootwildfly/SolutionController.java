@@ -26,7 +26,7 @@ import services.SolutionService;
 import services.TokenService;
 
 @RestController
-@RequestMapping(value="problems/{problemId}/solution", produces="application/json")
+@RequestMapping(value="problem/{problemId}/solution", produces="application/json")
 public class SolutionController {
 
 	@Autowired
