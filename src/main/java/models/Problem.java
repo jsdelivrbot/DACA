@@ -1,11 +1,14 @@
 package models;
 
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
@@ -21,9 +24,9 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 public class Problem {
 
 	@Id
+	@GeneratedValue(strategy=GenerationType.AUTO)
 	private Long id;
 	
-	@Column
 	@ManyToOne
 	private User owner;
 	
@@ -44,7 +47,6 @@ public class Problem {
 	@JsonProperty("created")
 	private Date creationDate; 
 	
-	@Column
 	@OneToMany(fetch = FetchType.LAZY)
 	@Cascade(CascadeType.ALL)
 	private List<Test> tests;
@@ -57,6 +59,14 @@ public class Problem {
 		
 	}
 	
+	public Problem(User owner, String name, String description, String tip) {
+		setOwner(owner);
+		setName(name);
+		setDescription(description);
+		setTip(tip);
+		setCreationDate(Calendar.getInstance().getTime());
+	}
+
 	public Long getId() {
 		return this.id;
 	}
@@ -136,7 +146,7 @@ public class Problem {
 	}
 
 	public boolean isTestOutputVisible(Test test, User requestor) {
-		return test.isPublic() || (requestor != null && this.getOwner().equals(requestor.getEmail()));
+		return test.isPublic() || (requestor != null && this.getOwner().equals(requestor));
 	}
 
 	@Override

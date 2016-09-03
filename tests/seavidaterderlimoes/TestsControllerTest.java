@@ -37,15 +37,16 @@ public class TestsControllerTest {
 	
 	@Value("${local.server.port}")
 	private int port;
-	
+	 
 	private String token1;
 	private String token2;
+	private String location;
 	
 	@Before
 	public void setUp() {
 		this.token1 = this.tokenService.generateToken(new User("abner@gmail.com", "123456"));
 		this.token2 = this.tokenService.generateToken(new User("default@gmail.com", "123456"));
-		given()
+		location = given()
 			.accept("application/json")
 			.contentType("application/json")
 			.header("Authorization", "Token " + this.token1)
@@ -58,12 +59,13 @@ public class TestsControllerTest {
 			.port(this.port)
 			.post("problems")
 		.then()
-			.assertThat().statusCode(is(201));
+			.assertThat().statusCode(is(201))
+		.extract().header("Location");
 	}
 	
 	@After
 	public void tearDown() {
-		this.repository.clear();
+		this.repository.deleteAll();
 	}
 	
 	@Test
@@ -73,7 +75,7 @@ public class TestsControllerTest {
 			.contentType("application/json")
 		.when()
 			.port(this.port)
-			.get("problems/0/tests")
+			.get(location + "/tests")
 		.then()
 			.assertThat().statusCode(is(200)).and().body(is("[]"));
 		given()
@@ -83,14 +85,14 @@ public class TestsControllerTest {
 			.body(new JSONArray()
 					.put(new JSONObject()
 							.put("input", "1")
-							.put("expected_output", "1"))
+							.put("expectedOutput", "1"))
 					.put(new JSONObject()
 							.put("input", "2")
-							.put("expected_output", "4"))
+							.put("expectedOutput", "4"))
 					.toString())
 		.when()
 			.port(this.port)
-			.put("/problems/0/tests")
+			.put(location + "/tests")
 		.then()
 			.assertThat().statusCode(is(204));
 		given()
@@ -99,11 +101,11 @@ public class TestsControllerTest {
 			.header("Authorization", "Token " + this.token1)
 		.when()
 			.port(this.port)
-			.get("problems/0/tests")
+			.get(location + "/tests")
 		.then()
 			.assertThat().statusCode(is(200)).and()
 				.body("input", hasItems("1", "2")).and()
-				.body("expected_output", hasItems("1", "4"));
+				.body("expectedOutput", hasItems("1", "4"));
 	}
 	
 	@Test
@@ -115,14 +117,14 @@ public class TestsControllerTest {
 			.body(new JSONArray()
 					.put(new JSONObject()
 							.put("input", "")
-							.put("expected_output", "1"))
+							.put("expectedOutput", "1"))
 					.put(new JSONObject()
 							.put("input", "2")
-							.put("expected_output", "4"))
+							.put("expectedOutput", "4"))
 					.toString())
 		.when()
 			.port(this.port)
-			.put("/problems/0/tests")
+			.put(location + "/tests")
 		.then()
 			.assertThat().statusCode(is(400)).and().body("field", is("input"));
 		given()
@@ -132,14 +134,14 @@ public class TestsControllerTest {
 			.body(new JSONArray()
 					.put(new JSONObject()
 							.put("input", "1")
-							.put("expected_output", "1"))
+							.put("expectedOutput", "1"))
 					.put(new JSONObject()
 							.put("input", "2")
-							.put("expected_output", ""))
+							.put("expectedOutput", ""))
 					.toString())
 		.when()
 			.port(this.port)
-			.put("/problems/0/tests")
+			.put(location + "/tests")
 		.then()
 			.assertThat().statusCode(is(400)).and().body("field", is("expected_output"));
 	}
@@ -153,14 +155,14 @@ public class TestsControllerTest {
 			.body(new JSONArray()
 					.put(new JSONObject()
 							.put("input", "1")
-							.put("expected_output", "1"))
+							.put("expectedOutput", "1"))
 					.put(new JSONObject()
 							.put("input", "2")
-							.put("expected_output", "4"))
+							.put("expectedOutput", "4"))
 					.toString())
 		.when()
 			.port(this.port)
-			.put("/problems/0/tests")
+			.put(location + "/tests")
 		.then()
 			.assertThat().statusCode(is(401));
 	}
@@ -174,14 +176,14 @@ public class TestsControllerTest {
 			.body(new JSONArray()
 					.put(new JSONObject()
 							.put("input", "1")
-							.put("expected_output", "1"))
+							.put("expectedOutput", "1"))
 					.put(new JSONObject()
 							.put("input", "2")
-							.put("expected_output", "4"))
+							.put("expectedOutput", "4"))
 					.toString())
 		.when()
 			.port(this.port)
-			.put("/problems/0/tests")
+			.put(location + "/tests")
 		.then()
 			.assertThat().statusCode(is(204));
 		given()
@@ -189,11 +191,11 @@ public class TestsControllerTest {
 			.contentType("application/json")
 		.when()
 			.port(this.port)
-			.get("problems/0/tests")
+			.get(location + "/tests")
 		.then()
 			.assertThat().statusCode(is(200)).and()
 				.body("input", hasItems("1", "2")).and()
-				.body("expected_output", not(hasItems("1", "4")));
+				.body("expectedOutput", not(hasItems("1", "4")));
 		given()
 			.accept("application/json")
 			.contentType("application/json")
@@ -201,16 +203,16 @@ public class TestsControllerTest {
 			.body(new JSONArray()
 					.put(new JSONObject()
 							.put("input", "1")
-							.put("expected_output", "1")
+							.put("expectedOutput", "1")
 							.put("public", true))
 					.put(new JSONObject()
 							.put("input", "2")
-							.put("expected_output", "4")
+							.put("expectedOutput", "4")
 							.put("public", true))
 					.toString())
 		.when()
 			.port(this.port)
-			.put("/problems/0/tests")
+			.put(location + "/tests")
 		.then()
 			.assertThat().statusCode(is(204));
 		given()
@@ -218,11 +220,11 @@ public class TestsControllerTest {
 			.contentType("application/json")
 		.when()
 			.port(this.port)
-			.get("problems/0/tests")
+			.get(location + "/tests")
 		.then()
 			.assertThat().statusCode(is(200)).and()
 				.body("input", hasItems("1", "2")).and()
-				.body("expected_output", hasItems("1", "4"));
+				.body("expectedOutput", hasItems("1", "4"));
 	}
 	
 	@Test
@@ -234,14 +236,14 @@ public class TestsControllerTest {
 			.body(new JSONArray()
 					.put(new JSONObject()
 							.put("input", "1")
-							.put("expected_output", "1"))
+							.put("expectedOutput", "1"))
 					.put(new JSONObject()
 							.put("input", "2")
-							.put("expected_output", "4"))
+							.put("expectedOutput", "4"))
 					.toString())
 		.when()
 			.port(this.port)
-			.put("/problems/0/tests")
+			.put(location + "/tests")
 		.then()
 			.assertThat().statusCode(is(204));
 		given()
@@ -254,7 +256,7 @@ public class TestsControllerTest {
 					.toString())
 		.when()
 			.port(this.port)
-			.put("/problems/0")
+			.put(location)
 		.then()
 			.assertThat().statusCode(is(204));
 		given()
@@ -262,7 +264,7 @@ public class TestsControllerTest {
 			.contentType("application/json")
 		.when()
 			.port(this.port)
-			.get("problems/0")
+			.get(location)
 		.then()
 			.assertThat().statusCode(is(200)).and().body("published", is(true));
 	}
@@ -279,7 +281,7 @@ public class TestsControllerTest {
 					.toString())
 		.when()
 			.port(this.port)
-			.put("/problems/0")
+			.put(location)
 		.then()
 			.assertThat().statusCode(is(400)).and().body("field", is("published"));
 		given()
@@ -287,7 +289,7 @@ public class TestsControllerTest {
 			.contentType("application/json")
 		.when()
 			.port(this.port)
-			.get("problems/0")
+			.get(location)
 		.then()
 			.assertThat().statusCode(is(200)).and().body("published", is(false));
 	}

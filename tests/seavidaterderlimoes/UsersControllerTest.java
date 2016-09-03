@@ -32,7 +32,7 @@ public class UsersControllerTest {
 	
 	@After
 	public void tearDown() {
-		this.repository.clear();
+		this.repository.deleteAll();
 	}
 	
 	@Test

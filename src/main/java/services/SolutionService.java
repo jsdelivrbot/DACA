@@ -16,16 +16,6 @@ public class SolutionService {
 	@Autowired
 	private SolutionRepository repository;
 	
-	public boolean isSolved(Problem problem, User user) {
-		Iterable<Solution> solutions = repository.findAll();
-		for (Solution s : solutions) {
-			if (s.getProblem().equals(problem) && s.getSubmitter().equals(user)) {
-				return s.isSolved();
-			}
-		}
-		return false;
-	}
-
 	public int getNumSubmitters() {
 		Set<User> submitters = new HashSet<>();
 		Iterable<Solution> solutions = repository.findAll();
@@ -37,13 +27,32 @@ public class SolutionService {
 
 	public Object getNumSolved(User user) {
 		int solved = 0;
-		Iterable<Solution> solutions = repository.findAll();
+		Iterable<Solution> solutions = repository.findBySubmitter(user);
 		for (Solution s : solutions) {
-			if (s.getSubmitter().equals(user) && s.isSolved()) {
+			if (s.isSolved()) {
 				solved++;
 			}
 		}
 		return solved;
 	}
-	
+
+	public Solution getSubmitterSolution(User submitter, Long problemId) {
+		Iterable<Solution> solutions = repository.findBySubmitter(submitter);
+		for (Solution s : solutions) {
+			if (s.getProblem().getId().equals(problemId)) {
+				return s;
+			}
+		}
+		return null;
+	}
+
+	public boolean isSolved(Problem problem, User user) {
+		if (user == null) return false;
+		Solution s = getSubmitterSolution(user, problem.getId());
+		if (s == null) {
+			return false;
+		}
+		return s.isSolved();
+	}
+
 }

@@ -5,6 +5,8 @@ import java.util.List;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
@@ -18,14 +20,13 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 public class Solution {
 
 	@Id
+	@GeneratedValue(strategy=GenerationType.AUTO)
 	private Long id;
 	
-	@Column(nullable = false)
 	@ManyToOne(fetch=FetchType.LAZY)
 	@JsonIgnore
 	private User submitter;
 	
-	@Column(nullable = false)
 	@ManyToOne(fetch=FetchType.LAZY)
 	@JsonIgnore
 	private Problem problem;
@@ -33,8 +34,7 @@ public class Solution {
 	@Column
 	private String body;
 	
-	@Column
-	@OneToMany(fetch = FetchType.LAZY)
+	@OneToMany(fetch = FetchType.EAGER)
 	@Cascade(CascadeType.ALL)
 	private List<Output> outputs;
 	
@@ -42,6 +42,12 @@ public class Solution {
 		
 	}
 
+	public Solution(User submitter, Problem problem, String body) {
+		setSubmitter(submitter);
+		setProblem(problem);
+		setBody(body);
+	}
+	
 	public Long getId() {
 		return this.id;
 	}

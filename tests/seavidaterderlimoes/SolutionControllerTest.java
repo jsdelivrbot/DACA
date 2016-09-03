@@ -40,11 +40,12 @@ public class SolutionControllerTest {
 	private int port;
 	
 	private String token1;
+	private String location;
 	
 	@Before
 	public void setUp() {
 		this.token1 = this.tokenService.generateToken(new User("abner@gmail.com", "123456"));
-		given()
+		location = given()
 			.accept("application/json")
 			.contentType("application/json")
 			.header("Authorization", "Token " + this.token1)
@@ -57,7 +58,8 @@ public class SolutionControllerTest {
 			.port(this.port)
 			.post("problems")
 		.then()
-			.assertThat().statusCode(is(201));
+			.assertThat().statusCode(is(201))
+		.extract().header("Location");
 		given()
 			.accept("application/json")
 			.contentType("application/json")
@@ -65,14 +67,14 @@ public class SolutionControllerTest {
 			.body(new JSONArray()
 					.put(new JSONObject()
 							.put("input", "1")
-							.put("expected_output", "1"))
+							.put("expectedOutput", "1"))
 					.put(new JSONObject()
 							.put("input", "2")
-							.put("expected_output", "4"))
+							.put("expectedOutput", "4"))
 					.toString())
 		.when()
 			.port(this.port)
-			.put("/problems/0/tests")
+			.put(location + "/tests")
 		.then()
 			.assertThat().statusCode(is(204));
 		given()
@@ -87,15 +89,15 @@ public class SolutionControllerTest {
 					.toString())
 		.when()
 			.port(this.port)
-			.put("problems/0")
+			.put(location)
 		.then()
 			.assertThat().statusCode(is(204));
 	}
 
 	@After
 	public void tearDown() {
-		this.problemRepository.clear();
-		this.solutionRepository.clear();
+		this.solutionRepository.deleteAll();
+		this.problemRepository.deleteAll();
 	}
 	
 	@Test
@@ -106,7 +108,7 @@ public class SolutionControllerTest {
 			.header("Authorization", "Token " + this.token1)
 		.when()
 			.port(this.port)
-			.get("problems/0")
+			.get(location)
 		.then()
 			.assertThat().statusCode(is(200)).and().body("solved", is(false));
 		given()
@@ -118,7 +120,7 @@ public class SolutionControllerTest {
 					.toString())
 		.when()
 			.port(this.port)
-			.put("problems/0/solution")
+			.put(location + "/solution")
 		.then()
 			.assertThat().statusCode(is(200)).and().body("solved", is(true));
 		given()
@@ -127,7 +129,7 @@ public class SolutionControllerTest {
 			.header("Authorization", "Token " + this.token1)
 		.when()
 			.port(this.port)
-			.get("problems/0")
+			.get(location)
 		.then()
 			.assertThat().statusCode(is(200)).and().body("solved", is(true));
 	}
@@ -143,7 +145,7 @@ public class SolutionControllerTest {
 					.toString())
 		.when()
 			.port(this.port)
-			.put("problems/0/solution")
+			.put(location + "/solution")
 		.then()
 			.assertThat().statusCode(is(200)).and().body("solved", is(false));
 	}
@@ -162,7 +164,7 @@ public class SolutionControllerTest {
 					.toString())
 		.when()
 			.port(this.port)
-			.put("problems/0")
+			.put(location)
 		.then()
 			.assertThat().statusCode(is(204));
 		given()
@@ -174,7 +176,7 @@ public class SolutionControllerTest {
 					.toString())
 		.when()
 			.port(this.port)
-			.put("problems/0/solution")
+			.put(location + "/solution")
 		.then()
 			.assertThat().statusCode(is(400));
 	}
@@ -190,7 +192,7 @@ public class SolutionControllerTest {
 					.toString())
 		.when()
 			.port(this.port)
-			.put("problems/0/solution")
+			.put(location + "/solution")
 		.then()
 			.assertThat().statusCode(is(400));
 	}

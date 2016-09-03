@@ -1,7 +1,6 @@
 package seavidaterderlimoes;
 
 import static com.jayway.restassured.RestAssured.given;
-import static org.hamcrest.CoreMatchers.hasItems;
 import static org.hamcrest.CoreMatchers.is;
 
 import org.json.JSONObject;
@@ -49,7 +48,7 @@ public class ProblemsControllerTest {
 	
 	@After
 	public void tearDown() {
-		this.repository.clear();
+		this.repository.deleteAll();
 	}
 	
 	@Test
@@ -62,7 +61,7 @@ public class ProblemsControllerTest {
 			.get("problems")
 		.then()
 			.assertThat().statusCode(is(200)).and().body(is("[]"));
-		given()
+		String location = given()
 			.accept("application/json")
 			.contentType("application/json")
 			.header("Authorization", "Token " + this.token1)
@@ -75,7 +74,8 @@ public class ProblemsControllerTest {
 			.port(this.port)
 			.post("problems")
 		.then()
-			.assertThat().statusCode(is(201));
+			.assertThat().statusCode(is(201))
+		.extract().header("Location");
 		given()
 			.accept("application/json")
 			.contentType("application/json")
@@ -83,15 +83,13 @@ public class ProblemsControllerTest {
 			.port(this.port)
 			.get("problems")
 		.then()
-			.assertThat().statusCode(is(200)).and()
-				.body("name", hasItems("potencia")).and()
-				.body("description", hasItems("defina potencia"));
+			.assertThat().statusCode(is(200)).and().body(is("[]"));
 		given()
 			.accept("application/json")
 			.contentType("application/json")
 		.when()
 			.port(this.port)
-			.get("problems/0")
+			.get(location)
 		.then()
 			.assertThat().statusCode(is(200)).and()
 				.body("name", is("potencia"))
@@ -121,7 +119,7 @@ public class ProblemsControllerTest {
 	
 	@Test
 	public void testUpdateProblem() {
-		given()
+		String location = given()
 			.accept("application/json")
 			.contentType("application/json")
 			.header("Authorization", "Token " + this.token1)
@@ -134,7 +132,8 @@ public class ProblemsControllerTest {
 			.port(this.port)
 			.post("problems")
 		.then()
-			.assertThat().statusCode(is(201));
+			.assertThat().statusCode(is(201))
+		.extract().header("Location");
 		given()
 			.accept("application/json")
 			.contentType("application/json")
@@ -146,7 +145,7 @@ public class ProblemsControllerTest {
 					.toString())
 		.when()
 			.port(this.port)
-			.put("problems/0")
+			.put(location)
 		.then()
 			.assertThat().statusCode(is(204));
 		given()
@@ -154,7 +153,7 @@ public class ProblemsControllerTest {
 			.contentType("application/json")
 		.when()
 			.port(this.port)
-			.get("problems/0")
+			.get(location)
 		.then()
 			.assertThat().statusCode(is(200)).and()
 				.body("name", is("nova potencia"))
@@ -177,10 +176,10 @@ public class ProblemsControllerTest {
 					.toString())
 		.when()
 			.port(this.port)
-			.put("problems/0")
+			.put("problems/1")
 		.then()
 			.assertThat().statusCode(is(404));
-		given()
+		String location = given()
 			.accept("application/json")
 			.contentType("application/json")
 			.header("Authorization", "Token " + this.token1)
@@ -193,7 +192,8 @@ public class ProblemsControllerTest {
 			.port(this.port)
 			.post("problems")
 		.then()
-			.assertThat().statusCode(is(201));
+			.assertThat().statusCode(is(201))
+		.extract().header("Location");
 		given()
 			.accept("application/json")
 			.contentType("application/json")
@@ -205,7 +205,7 @@ public class ProblemsControllerTest {
 					.toString())
 		.when()
 			.port(this.port)
-			.put("problems/0")
+			.put(location)
 		.then()
 			.assertThat().statusCode(is(401));
 		given()
@@ -219,7 +219,7 @@ public class ProblemsControllerTest {
 					.toString())
 		.when()
 			.port(this.port)
-			.put("problems/0")
+			.put(location)
 		.then()
 			.assertThat().statusCode(is(204));
 	}
@@ -232,10 +232,10 @@ public class ProblemsControllerTest {
 			.header("Authorization", "Token " + this.token1)
 		.when()
 			.port(this.port)
-			.delete("problems/0")
+			.delete("problems/1")
 		.then()
 			.assertThat().statusCode(is(404));
-		given()
+		String location = given()
 			.accept("application/json")
 			.contentType("application/json")
 			.header("Authorization", "Token " + this.token1)
@@ -248,13 +248,14 @@ public class ProblemsControllerTest {
 			.port(this.port)
 			.post("problems")
 		.then()
-			.assertThat().statusCode(is(201));
+			.assertThat().statusCode(is(201))
+		.extract().header("Location");
 		given()
 			.accept("application/json")
 			.contentType("application/json")
 		.when()
 			.port(this.port)
-			.get("problems/0")
+			.get(location)
 		.then()
 			.assertThat().statusCode(is(200));
 		given()
@@ -263,7 +264,7 @@ public class ProblemsControllerTest {
 			.header("Authorization", "Token " + this.token1)
 		.when()
 			.port(this.port)
-			.delete("problems/0")
+			.delete(location)
 		.then()
 			.assertThat().statusCode(is(204));
 		given()
@@ -271,14 +272,14 @@ public class ProblemsControllerTest {
 			.contentType("application/json")
 		.when()
 			.port(this.port)
-			.get("problems/0")
+			.get(location)
 		.then()
 			.assertThat().statusCode(is(404));
 	}
 	
 	@Test
 	public void testDeleteNotAuthorized() {
-		given()
+		String location = given()
 			.accept("application/json")
 			.contentType("application/json")
 			.header("Authorization", "Token " + this.token1)
@@ -291,14 +292,15 @@ public class ProblemsControllerTest {
 			.port(this.port)
 			.post("problems")
 		.then()
-			.assertThat().statusCode(is(201));
+			.assertThat().statusCode(is(201))
+		.extract().header("Location");
 		given()
 			.accept("application/json")
 			.contentType("application/json")
 			.header("Authorization", "Token " + this.token3)
 		.when()
 			.port(this.port)
-			.delete("problems/0")
+			.delete(location)
 		.then()
 			.assertThat().statusCode(is(401));
 	}

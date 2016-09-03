@@ -2,6 +2,8 @@ package models;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -10,6 +12,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 public class Test {
 
 	@Id
+	@GeneratedValue(strategy=GenerationType.AUTO)
 	private Long id;
 	
 	@Column
@@ -31,6 +34,14 @@ public class Test {
 	
 	protected Test() {
 		
+	}
+	
+	public Test(String name, String tip, String input, String expectedOutput, boolean isPublic) {
+		setName(name);
+		setTip(tip);
+		setInput(input);
+		setExpectedOutput(expectedOutput);
+		setPublic(isPublic);
 	}
 
 	public Long getId() {
@@ -73,9 +84,6 @@ public class Test {
 	}
 	
 	public void setExpectedOutput(String expectedOutput) {
-		if (expectedOutput == null || expectedOutput.trim().equals("")) {
-			throw new InvalidFieldException("expected_output", "Expected output cannot be empty.");
-		}
 		this.expectedOutput = expectedOutput;
 	}
 	
@@ -84,6 +92,9 @@ public class Test {
 	}
 	
 	public void setPublic(boolean isPublic) {
+		if (expectedOutput == null || expectedOutput.trim().equals("")) {
+			throw new InvalidFieldException("expected_output", "Expected output cannot be empty.");
+		}
 		this.isPublic = isPublic;
 	}
 	

@@ -4,7 +4,11 @@ import java.util.regex.Pattern;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
 public class User {
@@ -15,12 +19,14 @@ public class User {
 			Pattern.compile("^.{6,20}$");
 	
 	@Id
+	@GeneratedValue(strategy=GenerationType.AUTO)
 	private Long id;
 	
 	@Column(nullable = false)
 	private String email;
 	
 	@Column(nullable = false)
+	@JsonIgnore
 	private String password;
 	
 	@Column(nullable = false)
@@ -28,6 +34,11 @@ public class User {
 	
 	protected User() {
 		
+	}
+	
+	public User(String email, String password) {
+		setEmail(email);
+		setPassword(password);
 	}
 	
 	public Long getId() {

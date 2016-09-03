@@ -3,6 +3,8 @@ package bootwildfly;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.transaction.Transactional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -16,10 +18,9 @@ import org.springframework.web.bind.annotation.RestController;
 import models.InvalidFieldException;
 import models.Problem;
 import models.Test;
+import models.TestDTO;
 import models.User;
-import services.AuthException;
 import services.ProblemRepository;
-import services.ResourceNotFoundException;
 import services.TokenService;
 
 @RestController
@@ -32,7 +33,7 @@ public class TestsController {
 	private TokenService tokenService;
 	
 	private Problem getProblem(Long problemId) {
-		Problem problem = repository.findById(problemId);
+		Problem problem = repository.findOne(problemId);
 		if (problem == null) {
 			throw new ResourceNotFoundException();
 		}
@@ -40,35 +41,41 @@ public class TestsController {
 	}
 	
 	@RequestMapping(method=RequestMethod.GET)
-	public List<Test> listTests(@PathVariable("problemId") Long problemId,
+	public List<TestDTO> listTests(@PathVariable("problemId") Long problemId,
 			@RequestHeader(value="Authorization", required=false) String token) {
 		User requestor = tokenService.getUser(token);
 		Problem problem = getProblem(problemId);
-		List<Test> tests = problem.getTests();
-		for (Test test : tests) {
-			if (!problem.isTestOutputVisible(test, requestor)) {
-				test.setExpectedOutput(null);
+		List<TestDTO> tests = new ArrayList<>();
+		for (Test test : problem.getTests()) {
+			TestDTO t = new TestDTO();
+			t.setName(test.getName());
+			t.setTip(test.getTip());
+			t.setInput(test.getInput());
+			if (problem.isTestOutputVisible(test, requestor)) {
+				t.setExpectedOutput(test.getExpectedOutput());
 			}
+			tests.add(t);
 		}
 		return tests;
 	}
 	
 	@ResponseStatus(HttpStatus.NO_CONTENT)
 	@RequestMapping(method=RequestMethod.PUT)
+	@Transactional
 	public void insertTests(@PathVariable("problemId") Long problemId,
-			@RequestBody List<Test> tests, @RequestHeader(value="Authorization") String token) {
+			@RequestBody List<TestDTO> testsDTO, @RequestHeader(value="Authorization") String token) {
 		User requestor = tokenService.validateToken(token);
 		Problem problem = getProblem(problemId);
-		if (!requestor.isAdmin() && !requestor.getEmail().equals(problem.getOwner())) {
+		if (!requestor.isAdmin() && !requestor.equals(problem.getOwner())) {
 			throw new AuthException("You don't have permission to perform this action.");
-		} else if (tests.isEmpty()) {
+		} else if (testsDTO.isEmpty()) {
 			throw new InvalidFieldException("tests", "Tests cannot be empty.");
 		}
-		List<Test> verifiedTests = new ArrayList<Test>();
-		for (Test t : tests) {
-			verifiedTests.add(new Test(t.getName(), t.getTip(), t.getInput(), t.getExpectedOutput(), t.isPublic()));
+		problem.getTests().clear();
+		for (TestDTO t : testsDTO) {
+			Test test = new Test(t.getName(), t.getTip(), t.getInput(), t.getExpectedOutput(), t.isPublic());
+			problem.getTests().add(test);
 		}
-		problem.setTests(verifiedTests);
 		repository.save(problem);
 	}
 	

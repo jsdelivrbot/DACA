@@ -11,6 +11,7 @@ import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import bootwildfly.AuthException;
 import models.User;
 
 @Component
@@ -42,7 +43,7 @@ public class TokenService {
 	public String generateToken(User user) {
 		long currentTime = new Date().getTime() / 1000;
 		JSONObject json = new JSONObject();
-		json.put("id", user.getId());
+		json.put("email", user.getEmail());
 		json.put("expires", currentTime + expirationSeconds);
 		String token = null;
 		try {
@@ -56,12 +57,12 @@ public class TokenService {
 	public User validateToken(String token)  {
 		String value = token.replace("Token ", "");
 		JSONObject json;
-		Long id;
+		String email;
 		long expires;
 		try {
 			String decrypted = decrypt(value);
 			json = new JSONObject(decrypted);
-			id = json.getLong("id");
+			email = json.getString("email");
 			expires = json.getLong("expires");
 		} catch (Exception e) {
 			throw new AuthException("Token malformed.");
@@ -70,7 +71,11 @@ public class TokenService {
 		if (currentTime > expires) {
 			throw new AuthException("Token has expired.");
 		}
-		return repository.findOne(id);
+		Iterable<User> users = repository.findByEmail(email);
+		for (User u : users) {
+			return u;
+		}
+		throw new AuthException("User not found.");
 	}
 	
 	public User getUser(String token) {
