@@ -1,4 +1,5 @@
-Para executar os testes, executar a classe ./tests/seavidatederlimoes/AllTests.java.
+Para executar os testes:
+mvn test
 
 Para ler a API, acessar o link dentro da pasta ./docs.
 
