@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RestController;
 import models.InvalidFieldException;
 import models.User;
 import models.UserDTO;
+import services.AuthException;
 import services.TokenService;
 import services.UserRepository;
 

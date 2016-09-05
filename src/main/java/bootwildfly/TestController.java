@@ -20,6 +20,7 @@ import models.Problem;
 import models.Test;
 import models.TestDTO;
 import models.User;
+import services.AuthException;
 import services.ProblemRepository;
 import services.TokenService;
 

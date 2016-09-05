@@ -1,4 +1,4 @@
-package bootwildfly;
+package services;
 
 public class AuthException extends RuntimeException {
 

@@ -11,6 +11,7 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 
 import models.InvalidFieldException;
 import models.InvalidSolutionException;
+import services.AuthException;
 
 @EnableWebMvc
 @ControllerAdvice

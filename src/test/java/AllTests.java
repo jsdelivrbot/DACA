@@ -8,5 +8,5 @@ import org.junit.runners.Suite.SuiteClasses;
 @SuiteClasses({ TestProblemController.class, TestSolutionController.class, TestTestController.class,
 		TestUserController.class })
 public class AllTests {
-
+ 
 }
