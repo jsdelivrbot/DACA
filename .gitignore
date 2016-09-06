@@ -2,6 +2,8 @@
 
 /doc/
 
+/.idea/*
+
 
 # Created by https://www.gitignore.io/api/intellij,java,linux
 
@@ -56,7 +58,6 @@ fabric.properties
 
 *.iml
 # modules.xml
-/.idea/ 
 # *.ipr
 
 
