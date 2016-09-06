@@ -23,7 +23,7 @@ public class StatsController {
 	@Autowired
 	private UserRepository userRepository;
 
-	@Cacheable
+	@Cacheable("stats")
 	@RequestMapping(value="stats", method=RequestMethod.GET, produces="application/json")
 	public ResponseEntity<String> getGlobalStats() {
 		return new HttpResponse()

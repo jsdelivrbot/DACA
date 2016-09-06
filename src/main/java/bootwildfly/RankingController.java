@@ -26,7 +26,7 @@ public class RankingController {
 	@Autowired
 	private SolutionService solutionService;
 
-	@Cacheable
+	@Cacheable("ranking")
 	@RequestMapping(method=RequestMethod.GET)
 	public List<Score> getRanking(@RequestParam(name="top", defaultValue="10") int top) {
 		Iterable<User> users = repository.findAll();

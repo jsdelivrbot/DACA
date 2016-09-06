@@ -41,7 +41,7 @@ public class ProblemController {
 	@Autowired
 	private ProblemRepository problemRepository;
 
-	@Cacheable
+	@Cacheable("problems")
 	@RequestMapping(method=RequestMethod.GET)
 	public List<ProblemDTO> listProblems(@RequestHeader(value="Authorization", required=false) String token,
 			@RequestParam(name="page", defaultValue="0") int page) {
