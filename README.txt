@@ -7,6 +7,6 @@ Link da aplicação:
 seavidaterderlimoes-dirlididi.rhcloud.com
 
 Link do jenkins:
-seavidaterderlimoes-dirlididi.rhcloud.com/jenkins
+https://jenkins-dirlididi.rhcloud.com/
 - Usuário: admin 
 - Senha: UNMMprrvYFSB 
