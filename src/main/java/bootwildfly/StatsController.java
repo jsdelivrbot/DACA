@@ -1,6 +1,7 @@
 package bootwildfly;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -21,7 +22,8 @@ public class StatsController {
 	private SolutionService solutionService;
 	@Autowired
 	private UserRepository userRepository;
-	
+
+	@Cacheable
 	@RequestMapping(value="stats", method=RequestMethod.GET, produces="application/json")
 	public ResponseEntity<String> getGlobalStats() {
 		return new HttpResponse()
