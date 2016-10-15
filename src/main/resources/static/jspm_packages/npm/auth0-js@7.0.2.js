@@ -1,0 +1,1 @@
+module.exports = require("npm:auth0-js@7.0.2/index.js");

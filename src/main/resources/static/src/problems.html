@@ -1,0 +1,22 @@
+<template>
+    <table class="table">
+        <thead>
+        <tr>
+            <th>Problem</th>
+            <th>Description</th>
+            <th>ID</th>
+            <th>Created</th>
+            <th>Solved</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr repeat.for="problem of problems">
+            <td>${problem.name}</td>
+            <td>${problem.description}</td>
+            <td>${problem.id}</td>
+            <td>${problem.created}</td>
+            <td>${problem.isSolved}</td>
+        </tr>
+        </tbody>
+    </table>
+</template>

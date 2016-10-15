@@ -1,10 +1,16 @@
-<!DOCTYPE HTML>
+<!DOCTYPE html>
 <html>
-	<head>
-		<title>dirlididi</title>
-	</head>
-	<body>
-		Bem-vindo ao <b>dirlididi</b>.<br>
-		Para consultar a API, <a href="http://docs.dirlididi.apiary.io/#reference">clique aqui</a>.
-	</body>
+  <head>
+    <title>Aurelia!</title>
+    <link rel="stylesheet" href="styles/styles.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+  </head>
+
+  <body aurelia-app>
+    <script src="jspm_packages/system.js"></script>
+    <script src="config.js"></script>
+    <script>
+      SystemJS.import('aurelia-bootstrapper');
+    </script>
+  </body>
 </html>
