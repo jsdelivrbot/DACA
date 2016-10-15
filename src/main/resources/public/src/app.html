@@ -1,0 +1,14 @@
+<template>
+	<div class="menu">
+		<span class="divider">Dirlididi</span>
+		<a href="#">Welcome</a>
+		<a href="#problem">Problems</a>
+		<span if.bind="loggedIn"><a href="#create_problem">Create problem</a></span>
+		<span if.bind="!loggedIn"><a href="#login" class="pull-right">Login</a></span>
+		<span if.bind="loggedIn"><a href="#" class="pull-right" click.trigger="logout()">Logout</a></span>
+	</div>
+	<div class="page-host content">
+		<!-- Route mount point  -->
+		<router-view></router-view>
+	</div>
+</template>

@@ -1,0 +1,16 @@
+<template>
+	<strong>Login</strong>
+	<p class="error" if.bind="loginError">${loginError}</p>
+	<form submit.trigger="login()">
+		<input value.bind="loginEmail" type="email" name="email" placeholder="E-mail">
+		<input value.bind="loginPassword" type="password" name="password" placeholder="Password">
+		<button type="submit">Login</button>
+	</form>
+	<p>Doesn't have an account? Create now!</p>
+	<p class="error" if.bind="signupError">${signupError}</p>
+	<form submit.trigger="signup()">
+		<input value.bind="signupEmail" type="email" name="email" placeholder="E-mail">
+		<input value.bind="signupPassword" type="password" name="password" placeholder="Password">
+		<button type="submit">Sign up</button>
+	</form>
+</template>
