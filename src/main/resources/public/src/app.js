@@ -7,8 +7,9 @@ export class App {
 	constructor(eventAggregator) {
 		this.eventAggregator = eventAggregator;
 		var self = this;
-		this.eventAggregator.subscribe('login', function(token) {
+		this.eventAggregator.subscribe('login', function(token, email) {
 			localStorage.setItem('token', token);
+			localStorage.setItem('email', email);
 			self.loggedIn = true;
 			window.location.href = '#';
 		});

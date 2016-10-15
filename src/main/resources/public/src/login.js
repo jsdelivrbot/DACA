@@ -34,7 +34,7 @@ export class Login {
 		})
 		.then(function(json) {
 			if (json.hasOwnProperty('token')) {
-				self.eventAggregator.publish('login', json['token']);
+				self.eventAggregator.publish('login', json['token'], email);
 			} else {
 				self.loginError = json['reason'];
 			}
@@ -63,7 +63,7 @@ export class Login {
 		})
 		.then(function(json) {
 			if (json.hasOwnProperty('token')) {
-				self.eventAggregator.publish('login', json['token']);
+				self.eventAggregator.publish('login', json['token'], email);
 			} else {
 				self.signupError = json['reason'];
 			}

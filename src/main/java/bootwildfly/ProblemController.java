@@ -6,7 +6,6 @@ import java.util.List;
 import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -41,7 +40,6 @@ public class ProblemController {
 	@Autowired
 	private ProblemRepository problemRepository;
 
-	@Cacheable("problems")
 	@RequestMapping(method=RequestMethod.GET)
 	public List<ProblemDTO> listProblems(@RequestHeader(value="Authorization", required=false) String token,
 			@RequestParam(name="page", defaultValue="0") int page) {
@@ -53,6 +51,7 @@ public class ProblemController {
 			p.setOwnerEmail(problem.getOwner().getEmail());
 			p.setName(problem.getName());
 			p.setDescription(problem.getDescription());
+			p.setTip(problem.getTip());
 			//p.setSolved(solutionService.isSolved(problem, requestor));
 			p.setPublished(problem.isPublished());
 			problemsDTO.add(p);
@@ -66,6 +65,9 @@ public class ProblemController {
 			HttpServletResponse response) {
 		User requestor = tokenService.validateToken(token);
 		Problem problem = new Problem(requestor, problemDTO.getName(), problemDTO.getDescription(), problemDTO.getTip());
+		if (problemDTO.isPublished()) {
+			problem.setPublished(true);
+		}
 		problemRepository.save(problem);
 		response.setHeader("Location", "/problem/" + problem.getId());
 		return "{}";

@@ -3,14 +3,14 @@
 		<tr>
 			<th>Problem</th>
 			<th>Description</th>
-			<th>Created</th>
+			<th>Tip</th>
 			<th>Solved</th>
 		</tr>
-		<tr>
-			<td><a href="">Resultados da prova</a></td>
-			<td>Um professor listou...</td>
-			<td>2016-04-2016</td>
-			<td></td>
+		<tr repeat.for="problem of problems">
+			<td><a href="">${problem.name}</a></td>
+			<td>${problem.description}</td>
+			<td>${problem.tip}</td>
+			<td>${problem.solved}</td>
 		</tr>
-	</table>
+	</table> 
 </template>

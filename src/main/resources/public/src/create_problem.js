@@ -29,7 +29,8 @@ export class CreateProblem {
 			body: JSON.stringify({
 				name: name,
 				description: description,
-				tip: tip
+				tip: tip,
+				published: true
 			})
 		})
 		.then(function(response) {

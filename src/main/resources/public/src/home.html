@@ -2,13 +2,13 @@
 	<h2>Solve problems to learn programming skills!</h2>
 	<h3>Global Stats</h3>
 	<ul>
-		<li><strong>88</strong> problems</li>
-		<li><strong>28</strong> submitters</li>
+		<li><strong>${problems}</strong> problems</li>
+		<li><strong>${submitters}</strong> submitters</li>
 	</ul>
 	<div if.bind="loggedIn">
 		<h3>Your stats!</h3>
 		<ul>
-			<li><strong>0</strong> problems solved</li>
+			<li><strong>${solved}</strong> problems solved</li>
 		</ul>
 	</div>
 </template>
