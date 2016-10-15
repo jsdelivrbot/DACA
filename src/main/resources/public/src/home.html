@@ -5,8 +5,10 @@
 		<li><strong>88</strong> problems</li>
 		<li><strong>28</strong> submitters</li>
 	</ul>
-	<h3>Your stats!</h3>
-	<ul>
-		<li><strong>0</strong> problems solved</li>
-	</ul>
+	<div if.bind="loggedIn">
+		<h3>Your stats!</h3>
+		<ul>
+			<li><strong>0</strong> problems solved</li>
+		</ul>
+	</div>
 </template>

@@ -1,9 +1,11 @@
 <template>
 	<strong>Create a new problem</strong>
-	<form>
-		<input type="text" name="name" placeholder="Name">
-		<input type="text" name="description" placeholder="Description">
-		<input type="text" name="tip" placeholder="Tip">
+	<p if.bind="error" class="error">${error}</p>
+	<p if.bind="success" class="success">Problem created successfully!</p>
+	<form submit.trigger="create()">
+		<input value.bind="name" type="text" name="name" placeholder="Name">
+		<input value.bind="description" type="text" name="description" placeholder="Description">
+		<input value.bind="tip" type="text" name="tip" placeholder="Tip">
 		<button type="submit">Submit</button>
 	</form>
 </template>

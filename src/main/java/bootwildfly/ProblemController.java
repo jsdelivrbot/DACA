@@ -62,12 +62,13 @@ public class ProblemController {
 	
 	@ResponseStatus(HttpStatus.CREATED)
 	@RequestMapping(method=RequestMethod.POST)
-	public void createProblem(@RequestBody ProblemDTO problemDTO, @RequestHeader(value="Authorization") String token,
+	public String createProblem(@RequestBody ProblemDTO problemDTO, @RequestHeader(value="Authorization") String token,
 			HttpServletResponse response) {
 		User requestor = tokenService.validateToken(token);
 		Problem problem = new Problem(requestor, problemDTO.getName(), problemDTO.getDescription(), problemDTO.getTip());
 		problemRepository.save(problem);
 		response.setHeader("Location", "/problem/" + problem.getId());
+		return "{}";
 	} 
 	 
 	@RequestMapping(value="/{problemId}", method=RequestMethod.GET)
